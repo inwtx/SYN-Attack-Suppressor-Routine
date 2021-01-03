@@ -1,4 +1,4 @@
-# SYN-Attack-Suppressor-Routine
+# SYN-Attack-Suppressor-Routine v1.2
 
 This script stops SYN attacks.   SYN attacks use to be done from a single IP address.  They have now become more sophisticated, continuously changing the right most numbers in an IP address (ex: 001.002.003.050, 001.002.003.051, 001.002.003.052...001.002.003.100).  They have now gone even further to continuously changing the numbers in the 3rd, 2nd, and 1st positions from the right.  This script looks for multiple changes in the 3rd, 2nd, and 1st positions and blocks the 4th high order position and blocks this high order position for a selected number of minutes (ex: 123.0.0.0/8).  This script has been tested on my servers for over a year.  If you have large amounts of traffic coming into your server from all over the world, this script might block clients from the server for the block time.  See the setup instructions in the top of the script below.  
 
@@ -77,7 +77,7 @@ if [ -e $filePath/SRTII.txt ] && [[ $(cat $filePath/SRTII.txt | wc -l) -gt 0 ]];
    sed -i 's/$/\.0\.0\.0\/8 -j DROP/' $filePath/SRTII.txt             # append to every new found rec
 
    while read line1; do                # save newfound recs to log with found date
-         echo $line1 $(date "+%b.%d.%G.%R %s") >> $filePath/SRTII.log
+         echo $line1 $(date "+%b.%d.%Y.%R %s") >> $filePath/SRTII.log
    done< $filePath/SRTII.txt
 
    iptables -L MY_SYN_DROP -n | grep all | awk '{print $4}' | cut -d' ' -f1 > $filePath/SRTII.txt2  # get former MY_SYN_DROP IPs
